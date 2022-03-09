@@ -1,56 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, {useState} from 'react'
+import { v4 as uuidv4 } from 'uuid';
+import RecipeList from './components/RecipeList';
+import AddRecipe from './components/AddRecipe';
+
 
 function App() {
+
+  const [recipes, setRecipes] = useState([
+    {name: 'recipe1',
+      ingredients: '',
+      instructions: '',
+      notes: '',
+      id: uuidv4(),
+      createdAt: 'March 3rd, 2008'
+    },
+    {
+      name: 'recipe2',
+      ingredients: '',
+      instructions: '',
+      notes: '',
+      id: uuidv4(),
+      createdAt: '2004'
+    }
+  ])
+
+  const addRecipe = ({name, ingredients, instructions, notes}) => {
+    const date = new Date()
+    const newRecipe = {
+      name: name,
+      ingredients: ingredients,
+      instructions: instructions,
+      notes: notes,
+      id: uuidv4(),
+      createdAt: date.toLocaleDateString(),
+      
+    }
+    const newRecipes = [...recipes, newRecipe]
+    setRecipes(newRecipes)
+  }
+
+  const deleteRecipe = (id) => {
+    const newRecipes = recipes.filter((recipe) => recipe.id !== id)
+    setRecipes(newRecipes)
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div>
+    <h1>Recipes</h1>
+    <RecipeList 
+    recipes={recipes}
+    addRecipe={addRecipe}
+    deleteRecipe={deleteRecipe}/>
+    <AddRecipe 
+    recipes={recipes}
+    addRecipe={addRecipe}
+    
+    />
+    
+  
+      
     </div>
   );
 }
