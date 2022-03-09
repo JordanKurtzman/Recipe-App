@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import RecipeList from './components/RecipeList';
 import AddRecipe from './components/AddRecipe';
+import Recipe from './components/Recipe';
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
       createdAt: '2004'
     }
   ])
+  
 
   const addRecipe = ({name, ingredients, instructions, notes}) => {
     const date = new Date()
@@ -45,6 +47,8 @@ function App() {
   }
 
 
+  
+
   return (
     <div>
     <h1>Recipes</h1>
@@ -52,9 +56,17 @@ function App() {
     recipes={recipes}
     addRecipe={addRecipe}
     deleteRecipe={deleteRecipe}/>
+
+
+    
+
+
+
     <AddRecipe 
-    recipes={recipes}
+    
     addRecipe={addRecipe}
+   
+
     
     />
     
