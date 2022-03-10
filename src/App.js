@@ -2,16 +2,26 @@ import React, {useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import RecipeList from './components/RecipeList';
 import AddRecipe from './components/AddRecipe';
-import Recipe from './components/Recipe';
+import {ErrorBoundary } from 'react-error-boundary'
 
+const ErrorFallBack = ({error}) => {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+  
+    </div>
+
+  )
+}
 
 function App() {
 
   const [recipes, setRecipes] = useState([
     {name: 'recipe1',
-      ingredients: '',
-      instructions: '',
-      notes: '',
+      ingredients: 'Chicken, tomatoes, peas',
+      instructions: 'boil',
+      notes: 'lalala',
       id: uuidv4(),
       createdAt: 'March 3rd, 2008'
     },
@@ -26,7 +36,7 @@ function App() {
   ])
   
 
-  const addRecipe = ({name, ingredients, instructions, notes}) => {
+  const addRecipe = (name, ingredients, instructions, notes) => {
     const date = new Date()
     const newRecipe = {
       name: name,
@@ -35,7 +45,6 @@ function App() {
       notes: notes,
       id: uuidv4(),
       createdAt: date.toLocaleDateString(),
-      
     }
     const newRecipes = [...recipes, newRecipe]
     setRecipes(newRecipes)
@@ -52,10 +61,15 @@ function App() {
   return (
     <div>
     <h1>Recipes</h1>
-    <RecipeList 
-    recipes={recipes}
-    addRecipe={addRecipe}
-    deleteRecipe={deleteRecipe}/>
+    <ErrorBoundary
+    FallbackComponent={ErrorFallBack}>
+        <RecipeList
+          recipes={recipes}
+          addRecipe={addRecipe}
+          deleteRecipe={deleteRecipe} />
+    
+    </ErrorBoundary>
+    
 
 
     
@@ -63,11 +77,7 @@ function App() {
 
 
     <AddRecipe 
-    
     addRecipe={addRecipe}
-   
-
-    
     />
     
   

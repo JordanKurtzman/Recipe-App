@@ -1,61 +1,60 @@
 import React, {useState} from 'react'
 
 const AddRecipe = ({addRecipe}) => {
-    const [recipeText, setRecipeText] = useState({
-        name: '',
-        ingredients: '',
-        instructions: '',
-        notes: ''
-    })
+    const [name, setName] = useState('')
+    const [ingredients, setIngredients] = useState('')
+    const [instructions, setInstructions] = useState('')
+    const [notes, setNotes] = useState('')
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        addRecipe()
+    const handleSubmit = () => {
+        addRecipe(name, ingredients, instructions, notes)
     }
 
     const handleNameChange = (e) => {
-        setRecipeText((prevState) => ({...prevState, name: e.target.value}))
+        setName(e.target.value)
     }
     const handleIngredientsChange = (e) => {
-        setRecipeText((prevState) => ({...prevState, ingredients: e.target.value }))
+        setIngredients(e.target.value)
     }
     const handleInstructionsChange = (e) => {
-        setRecipeText((prevState) => ({...prevState, instructions: e.target.value }))
+        setInstructions(e.target.value)
     }
     const handleNotesChange = (e) => {
-        setRecipeText((prevState) => ({...prevState, notes: e.target.value }))
+        setNotes(e.target.value)
     }
+
+    
 
     return (
         <div>
         <h2>Add a recipe:</h2>
-        <form>
+        
                 <input
                     type="text"
                     placeholder='name'
                     onChange={handleNameChange}
-                    value={recipeText.name}
+                    value={name}
                 />
                 <textarea
                     rows={20}
                     placeholder="ingredients"
                     onChange={handleIngredientsChange}
-                    value={recipeText.ingredients}
+                    value={ingredients}
                 />
                 <textarea
                     rows={20}
                     placeholder="instructions"
                     onChange={handleInstructionsChange}
-                    value={recipeText.instructions}
+                    value={instructions}
                 />
                 <textarea
                     rows={20}
                     placeholder="notes"
                     onChange={handleNotesChange}
-                    value={recipeText.notes}
+                    value={notes}
                 />
                 <button onClick={handleSubmit}>Add Recipe</button>
-        </form>
+        
         
         </div>
     )

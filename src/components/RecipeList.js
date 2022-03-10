@@ -4,7 +4,7 @@ import Recipe from './Recipe'
 const RecipeList = ({recipes, deleteRecipe}) => {
     return (
         <div>
-    {recipes.map((recipe, index) => {
+    {recipes.map((recipe) => {
         return <Recipe 
         name={recipe.name}
         ingredients={recipe.ingredients}
@@ -12,7 +12,7 @@ const RecipeList = ({recipes, deleteRecipe}) => {
         notes={recipe.notes}
         id={recipe.id}
         createdAt={recipe.createdAt}
-        key={recipe.index}
+        
         deleteRecipe={deleteRecipe}
         />
     })}            
