@@ -12,7 +12,7 @@ const RecipeList = ({recipes, deleteRecipe}) => {
         notes={recipe.notes}
         id={recipe.id}
         createdAt={recipe.createdAt}
-        
+        tags={recipe.tags}
         deleteRecipe={deleteRecipe}
         />
     })}            

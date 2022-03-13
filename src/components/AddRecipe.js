@@ -10,6 +10,11 @@ const AddRecipe = ({addRecipe}) => {
 
     const handleSubmit = () => {
         addRecipe(name, ingredients, instructions, notes, tags)
+        setName('')
+        setIngredients('')
+        setInstructions('')
+        setNotes('')
+        setTags([])
     }
 
     const handleNameChange = (e) => {
