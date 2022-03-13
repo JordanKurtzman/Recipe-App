@@ -5,9 +5,11 @@ const AddRecipe = ({addRecipe}) => {
     const [ingredients, setIngredients] = useState('')
     const [instructions, setInstructions] = useState('')
     const [notes, setNotes] = useState('')
+    const [tag, setTag] = useState ('')
+    const [tags, setTags] = useState([])
 
     const handleSubmit = () => {
-        addRecipe(name, ingredients, instructions, notes)
+        addRecipe(name, ingredients, instructions, notes, tags)
     }
 
     const handleNameChange = (e) => {
@@ -22,7 +24,10 @@ const AddRecipe = ({addRecipe}) => {
     const handleNotesChange = (e) => {
         setNotes(e.target.value)
     }
-
+    const handleTagChange = (e) => {
+        setTag(e.target.value)
+    }
+    
     
 
     return (
@@ -47,11 +52,24 @@ const AddRecipe = ({addRecipe}) => {
                     onChange={handleInstructionsChange}
                     value={instructions}
                 />
+               
                 <textarea
                     rows={20}
                     placeholder="notes"
                     onChange={handleNotesChange}
                     value={notes}
+                />
+                <input 
+                type="text"
+                placeholder='tags'
+                onChange={handleTagChange}
+                value={tag}
+                
+                onKeyPress={((e) =>{
+                    if(e.key === 'Enter'){
+                        setTags((prevTags) => setTags([...prevTags, e.target.value]))
+                    }
+                })}
                 />
                 <button onClick={handleSubmit}>Add Recipe</button>
         

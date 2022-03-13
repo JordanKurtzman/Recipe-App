@@ -18,25 +18,15 @@ const ErrorFallBack = ({error}) => {
 function App() {
 
   const [recipes, setRecipes] = useState([
-    {name: 'recipe1',
-      ingredients: 'Chicken, tomatoes, peas',
-      instructions: 'boil',
-      notes: 'lalala',
-      id: uuidv4(),
-      createdAt: 'March 3rd, 2008'
-    },
-    {
-      name: 'recipe2',
-      ingredients: '',
-      instructions: '',
-      notes: '',
-      id: uuidv4(),
-      createdAt: '2004'
-    }
+    
   ])
+
   
 
-  const addRecipe = (name, ingredients, instructions, notes) => {
+
+  
+
+  const addRecipe = (name, ingredients, instructions, notes, tags) => {
     const date = new Date()
     const newRecipe = {
       name: name,
@@ -45,6 +35,7 @@ function App() {
       notes: notes,
       id: uuidv4(),
       createdAt: date.toLocaleDateString(),
+      tags: tags
     }
     const newRecipes = [...recipes, newRecipe]
     setRecipes(newRecipes)
