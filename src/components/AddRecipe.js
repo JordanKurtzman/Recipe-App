@@ -59,6 +59,7 @@ const AddRecipe = ({addRecipe}) => {
                     onChange={handleNotesChange}
                     value={notes}
                 />
+                <label>Add tags to your recipe:</label>
                 <input 
                 type="text"
                 placeholder='tags'
@@ -68,9 +69,14 @@ const AddRecipe = ({addRecipe}) => {
                 onKeyPress={((e) =>{
                     if(e.key === 'Enter'){
                         setTags((prevTags) => setTags([...prevTags, e.target.value]))
+                        setTag('')
                     }
                 })}
                 />
+                {tags && tags.map((tag) => {
+                    return <p>{tag}</p>
+                })}
+               
                 <button onClick={handleSubmit}>Add Recipe</button>
         
         
