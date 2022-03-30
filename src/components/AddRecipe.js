@@ -32,7 +32,10 @@ const AddRecipe = ({addRecipe}) => {
     const handleTagChange = (e) => {
         setTag(e.target.value)
     }
-    
+    const deleteTag = (tag) => {
+        setTags(tags.filter((item) => item !== tag))
+    }
+   
     
 
     return (
@@ -78,8 +81,8 @@ const AddRecipe = ({addRecipe}) => {
                     }
                 })}
                 />
-                {tags && tags.map((tag) => {
-                    return <p>{tag}</p>
+                {tags && tags.map((tag, index) => {
+                    return <p key={index}>{tag}<button onClick={(() => deleteTag(tag))}>x</button></p>
                 })}
                
                 <button onClick={handleSubmit}>Add Recipe</button>

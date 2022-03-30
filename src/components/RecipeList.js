@@ -1,10 +1,11 @@
 import React from 'react'
 import Recipe from './Recipe'
 
-const RecipeList = ({recipes, deleteRecipe}) => {
+
+const RecipeList = ({recipesState, addRecipe, deleteRecipe}) => {
     return (
         <div>
-    {recipes.map((recipe) => {
+    {recipesState.recipes.map((recipe) => {
         return <Recipe 
         name={recipe.name}
         ingredients={recipe.ingredients}
@@ -14,6 +15,9 @@ const RecipeList = ({recipes, deleteRecipe}) => {
         createdAt={recipe.createdAt}
         tags={recipe.tags}
         deleteRecipe={deleteRecipe}
+        addRecipe={addRecipe}
+        
+        
         />
     })}            
 

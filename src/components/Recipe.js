@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Recipe = ({id, name, instructions, ingredients, notes, createdAt, deleteRecipe}) => {
+const Recipe = ({id, name, instructions, ingredients, notes, tags, createdAt, deleteRecipe}) => {
+
+    
     
 
 
@@ -13,9 +15,7 @@ const Recipe = ({id, name, instructions, ingredients, notes, createdAt, deleteRe
             <p>{notes}</p>
             <p>{createdAt}</p>
         <button onClick={(() => deleteRecipe(id))}>Delete</button>
-        <Link to={{
-            pathname: '/edit'
-        }}>Edit</Link>   
+        
         </div>
     )
 }

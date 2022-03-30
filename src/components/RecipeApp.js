@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useReducer } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { ErrorBoundary } from 'react-error-boundary'
 import RecipeList from './RecipeList'
@@ -16,16 +16,35 @@ const ErrorFallBack = ({ error }) => {
     )
 }
 
+const initialRecipeState = {
+    recipes: []
+}
+
+const recipeReducer = (prevState, action) => {
+    switch(action.type){
+        case 'ADD_RECIPE': {
+            const newState = {
+                recipes: [...prevState.recipes, action.payload ]
+            }
+            return newState
+        }
+        case 'DELETE_RECIPE': {
+            const newState = {
+                recipes: prevState.recipes.filter(recipe => recipe.id !== action.payload)
+            }
+            return newState
+
+        }
+        
+    }
+}
+
+
+
 const RecipeApp = () => {
 
-    const [recipes, setRecipes] = useState([
-
-    ])
-
-
-
-
-
+    const [recipesState, dispatch] = useReducer(recipeReducer, initialRecipeState)
+    
 
     const addRecipe = (name, ingredients, instructions, notes, tags) => {
         const date = new Date()
@@ -38,14 +57,24 @@ const RecipeApp = () => {
             createdAt: date.toLocaleDateString(),
             tags: tags
         }
-        const newRecipes = [...recipes, newRecipe]
-        setRecipes(newRecipes)
+        dispatch({type: 'ADD_RECIPE', payload: newRecipe})
+        console.log(recipesState)
     }
 
     const deleteRecipe = (id) => {
-        const newRecipes = recipes.filter((recipe) => recipe.id !== id)
-        setRecipes(newRecipes)
+        dispatch({type: 'DELETE_RECIPE', payload: id})
+        console.log('delete')
     }
+    const editRecipe = () => {
+        
+    }
+
+    
+ 
+
+   
+
+    
 
 
 
@@ -57,9 +86,10 @@ const RecipeApp = () => {
             <ErrorBoundary
                 FallbackComponent={ErrorFallBack}>
                 <RecipeList
-                    recipes={recipes}
+                    recipesState={recipesState}
                     addRecipe={addRecipe}
-                    deleteRecipe={deleteRecipe} />
+                    deleteRecipe={deleteRecipe}
+                    />
 
             </ErrorBoundary>
 
