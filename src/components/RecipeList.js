@@ -2,10 +2,10 @@ import React from 'react'
 import Recipe from './Recipe'
 
 
-const RecipeList = ({recipesState, addRecipe, deleteRecipe}) => {
+const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
     return (
         <div>
-    {recipesState.recipes.map((recipe) => {
+    {recipes.map((recipe) => {
         return <Recipe 
         name={recipe.name}
         ingredients={recipe.ingredients}

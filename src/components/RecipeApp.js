@@ -1,8 +1,10 @@
-import React, { useState, useReducer } from 'react'
+import React from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { ErrorBoundary } from 'react-error-boundary'
 import RecipeList from './RecipeList'
 import AddRecipe from './AddRecipe'
+import { useSelector, useDispatch } from 'react-redux';
+import { ADD_RECIPE, DELETE_RECIPE } from '../features/recipeslice';
 
 
 const ErrorFallBack = ({ error }) => {
@@ -16,34 +18,14 @@ const ErrorFallBack = ({ error }) => {
     )
 }
 
-const initialRecipeState = {
-    recipes: []
-}
 
-const recipeReducer = (prevState, action) => {
-    switch(action.type){
-        case 'ADD_RECIPE': {
-            const newState = {
-                recipes: [...prevState.recipes, action.payload ]
-            }
-            return newState
-        }
-        case 'DELETE_RECIPE': {
-            const newState = {
-                recipes: prevState.recipes.filter(recipe => recipe.id !== action.payload)
-            }
-            return newState
-
-        }
-        
-    }
-}
 
 
 
 const RecipeApp = () => {
 
-    const [recipesState, dispatch] = useReducer(recipeReducer, initialRecipeState)
+    const dispatch = useDispatch()
+    const recipes = useSelector((state) => state.recipes)
     
 
     const addRecipe = (name, ingredients, instructions, notes, tags) => {
@@ -57,17 +39,15 @@ const RecipeApp = () => {
             createdAt: date.toLocaleDateString(),
             tags: tags
         }
-        dispatch({type: 'ADD_RECIPE', payload: newRecipe})
-        console.log(recipesState)
+        dispatch(ADD_RECIPE(newRecipe))
+        console.log(recipes)
     }
 
     const deleteRecipe = (id) => {
-        dispatch({type: 'DELETE_RECIPE', payload: id})
+        dispatch(DELETE_RECIPE(id))
         console.log('delete')
     }
-    const editRecipe = () => {
-        
-    }
+    
 
     
  
@@ -86,7 +66,7 @@ const RecipeApp = () => {
             <ErrorBoundary
                 FallbackComponent={ErrorFallBack}>
                 <RecipeList
-                    recipesState={recipesState}
+                    recipes={recipes}
                     addRecipe={addRecipe}
                     deleteRecipe={deleteRecipe}
                     />
