@@ -18,13 +18,13 @@ export const recipeSlice = createSlice({
         EDIT_RECIPE_NAME: (state, action) => {
             state.recipes.map((recipe) => {
                 if(recipe.id === action.payload.id){
-                    return recipe.name === action.payload.name
+                    return recipe.name = action.payload.name
                 }
             })
         }
     }
 })
 
-export const { ADD_RECIPE, DELETE_RECIPE } = recipeSlice.actions;
+export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME } = recipeSlice.actions;
 
 export default recipeSlice.reducer

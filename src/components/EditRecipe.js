@@ -1,13 +1,23 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import {EDIT_RECIPE_NAME} from '../features/recipeslice'
+import { useDispatch } from 'react-redux'
+import Recipe from './Recipe'
+import { useLocation } from 'react-router-dom'
 
-const EditRecipe = ({ name, instructions, notes, ingredients, tags}) => {
+const EditRecipe = (props) => {
 
-    const [editedName, setName] = useState(name)
-    const [editedIngredients, setIngredients] = useState(ingredients)
-    const [editedInstructions, setInstructions] = useState(instructions)
-    const [editedNotes, setNotes] = useState(notes)
+    const [editedName, setName] = useState('')
+    const [editedIngredients, setIngredients] = useState('')
+    const [editedInstructions, setInstructions] = useState('')
+    const [editedNotes, setNotes] = useState('')
     const [tag, setTag] = useState('')
-    const [editedTags, setTags] = useState(tags)  
+    const [editedTags, setTags] = useState('')  
+
+    const dispatch = useDispatch()
+    const location = useLocation()
+    const state = location.state
+
+
     
     const handleNameChange = (e) => {
         let editedName = e.target.value
@@ -18,7 +28,6 @@ const EditRecipe = ({ name, instructions, notes, ingredients, tags}) => {
         setIngredients(editedIngredients)
     }
     const handleInstructionsChange = (e) => {
-        
         setInstructions(e.target.value)
     }
     const handleNotesChange = (e) => {
@@ -28,44 +37,23 @@ const EditRecipe = ({ name, instructions, notes, ingredients, tags}) => {
         setTag(e.target.value)
     }
 
-    return 
-    
-    (
+    return (
+        
         <div>
-        <h2>Edit a recipe:</h2>
-    <input
-        type="text"
-        placeholder='name'
-        onChange={handleNameChange}
-        value={name}
-    />
-    <textarea
-        rows={20}
-        placeholder="ingredients"
-        onChange={handleIngredientsChange}
-        value={ingredients}
-    />
-    <textarea
-        rows={20}
-        placeholder="instructions"
-        onChange={handleInstructionsChange}
-        value={instructions}
-    />
+            <Recipe />
+            <h2>Edit Recipe</h2>
+            <input
+            type='text'
+            onChange={handleNameChange}
+            value={state.name}
+            placeholder={state.name}
+            />
+            <button onClick={dispatch(EDIT_RECIPE_NAME(editedName))}>Save</button>
+        </div>
+    )
 
-    <textarea
-        rows={20}
-        placeholder="notes"
-        onChange={handleNotesChange}
-        value={notes}
-    />
-
-
-
-
-
-
-
-    </div>)
+    
+    
 }
 
     export default EditRecipe
