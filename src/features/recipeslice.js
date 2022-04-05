@@ -42,11 +42,21 @@ export const recipeSlice = createSlice({
                     return recipe.notes = action.payload.notes
                 }
             })
-        }
+        },
+        EDIT_RECIPE_TAG: (state, action) => {
+            state.recipes.map((recipe) => {
+                if (recipe.id === action.payload.id) {
+                    state.recipes.tags.map((item) => {
+                        return item.tag = action.payload.tag
+                    })
+                }
+            })
+        },
+
 
     }
 })
 
-export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES  } = recipeSlice.actions;
+export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, EDIT_RECIPE_TAG  } = recipeSlice.actions;
 
 export default recipeSlice.reducer

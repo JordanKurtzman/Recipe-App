@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Modal  from 'react-modal'
 import { useDispatch } from 'react-redux'
-import { EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES } from '../features/recipeslice'
+import { EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, EDIT_RECIPE_TAG } from '../features/recipeslice'
 
 const Recipe = ({id, name, instructions, ingredients, notes, tags, createdAt, deleteRecipe}) => {
     const [modalIsOpen, setIsOpen] = useState(false)
@@ -40,11 +40,13 @@ const Recipe = ({id, name, instructions, ingredients, notes, tags, createdAt, de
 
     return (
         <div>
-            <p>{name}</p>
-            <p>{ingredients}</p>
-            <p>{instructions}</p>
-            <p>{notes}</p>
-            <p>{createdAt}</p>
+            {name && <p>Name: {name}</p>}
+            {ingredients && <p>Ingredients: {ingredients}</p>}
+            {instructions && <p>Ingredients: {ingredients}</p>}
+            {notes && <p>Notes: {notes}</p>}
+            {tags && <p>Tags:{tags.map((tag) => {
+                return <p>{tag}</p>
+            })}</p>}
         <button onClick={(() => deleteRecipe(id))}>Delete</button>
         <button onClick={modalOpen}>Edit</button>
         <Modal
@@ -67,7 +69,7 @@ const Recipe = ({id, name, instructions, ingredients, notes, tags, createdAt, de
                 <p>{notes}</p>
                 <input
                     type="text"
-                    onChange={handleNotesChange} />
+                    onChange={handleNotesChange} />   
                 <button onClick={(() =>saveEdits(newName, newIngredients, newInstructions, newNotes, id))}>Save</button>
         </Modal>
         
