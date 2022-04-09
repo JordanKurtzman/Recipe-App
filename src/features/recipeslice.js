@@ -46,9 +46,10 @@ export const recipeSlice = createSlice({
         EDIT_RECIPE_TAG: (state, action) => {
             state.recipes.map((recipe) => {
                 if (recipe.id === action.payload.id) {
-                    state.recipes.tags.map((item) => {
-                        return item.tag = action.payload.tag
+                    recipe.tags.map((tag) => {
+                        return tag = action.payload
                     })
+                    
                 }
             })
         },
