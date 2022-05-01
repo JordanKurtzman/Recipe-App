@@ -26,6 +26,8 @@ const RecipeApp = () => {
 
     const dispatch = useDispatch()
     const recipes = useSelector((state) => state.recipes)
+
+    
     
 
     const addRecipe = (name, ingredients, instructions, notes, tags) => {
@@ -36,7 +38,8 @@ const RecipeApp = () => {
             instructions: instructions,
             notes: notes,
             id: uuidv4(),
-            createdAt: date.toLocaleDateString(),
+            date: date.toLocaleDateString(),
+            createdAt: Date.now(),
             tags: tags
         }
         dispatch(ADD_RECIPE(newRecipe))
@@ -69,6 +72,7 @@ const RecipeApp = () => {
                     recipes={recipes}
                     addRecipe={addRecipe}
                     deleteRecipe={deleteRecipe}
+                    
                     />
 
             </ErrorBoundary>

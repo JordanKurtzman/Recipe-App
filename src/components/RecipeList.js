@@ -1,8 +1,30 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Recipe from './Recipe'
+import { SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW } from '../features/recipeslice'
+import { useDispatch } from 'react-redux'
+
 
 
 const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
+    const [buttonText, setButtonText] = useState('Sort New to Old')
+
+    const dispatch = useDispatch()
+
+    const buttonChange = () => {
+        if(buttonText === 'Sort New to Old'){
+            setButtonText('Sort Old to New')
+            dispatch(SORT_NEW_TO_OLD())
+        }
+        if(buttonText === 'Sort Old to New'){
+            setButtonText('Sort New to Old')
+            dispatch(SORT_OLD_TO_NEW())
+        }
+        
+    }
+
+    
+
+    
     return (
         <div>
     {recipes.map((recipe, index) => {
@@ -13,7 +35,7 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
         notes={recipe.notes}
         id={recipe.id}
         createdAt={recipe.createdAt}
-        tags={recipe.tags}
+        date={recipe.date}
         deleteRecipe={deleteRecipe}
         addRecipe={addRecipe}
         key={index}
@@ -22,6 +44,11 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
         />
     })}            
 
+            {recipes.length > 0 && <div>
+                <button onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
+                <button onClick={(() => buttonChange())}>{buttonText}</button>
+                </div>
+        }
         
         </div>
     )

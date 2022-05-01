@@ -5,8 +5,8 @@ import { createSlice } from "@reduxjs/toolkit"
 export const recipeSlice = createSlice({
     name: 'recipesSlice',
     initialState: {
-        recipes: [],
-        sortBy: undefined
+        recipes: []
+        
     },
     reducers: {
         ADD_RECIPE: (state, action) => {
@@ -43,21 +43,57 @@ export const recipeSlice = createSlice({
                 }
             })
         },
-        EDIT_RECIPE_TAG: (state, action) => {
-            state.recipes.map((recipe) => {
-                if (recipe.id === action.payload.id) {
-                    recipe.tags.map((tag) => {
-                        return tag = action.payload
-                    })
-                    
+        SORT_ALPHABETICALLY: (state) => {
+            state.recipes.sort((a, b) =>{
+                if(a.name > b.name) {
+                    return 1
+                }
+                if(a.name < b.name){
+                    return -1
+                }
+                if(a.name === b.name){
+                    return 0
                 }
             })
         },
+        SORT_NEW_TO_OLD: (state) => {
+            state.recipes.sort((a,b) => {
+                if(a.createdAt < b.createdAt){
+                    return 1
+                }
+                if(a.createdAt > b.createdAt){
+                    return -1
+                }
+                else{
+                    return 0
+                }
+            })
+        },
+        SORT_OLD_TO_NEW: (state) => {
+            state.recipes.sort((a, b) => {
+                if (a.createdAt > b.createdAt) {
+                    return 1
+                }
+                if (a.createdAt < b.createdAt) {
+                    return -1
+                }
+                else {
+                    return 0
+                }
+            })
+        },
+                
+        
+        
+        
+        
+        
 
 
     }
+    
 })
 
-export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, EDIT_RECIPE_TAG  } = recipeSlice.actions;
+export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW  } = recipeSlice.actions;
 
 export default recipeSlice.reducer
