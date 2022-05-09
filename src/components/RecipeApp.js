@@ -63,7 +63,7 @@ const RecipeApp = () => {
 
 
     return (
-        <div>
+        <div className="recipeapp">
 
             <h1>Recipes</h1>
             <ErrorBoundary

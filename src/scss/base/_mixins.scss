@@ -1,0 +1,67 @@
+//MEDIA QUERY MANAGER
+
+/* 
+0 - 600px:  Phone
+600 - 900px: Tablet portrait mode
+900 - 1200px: Tablet in landscape mode
+
+1200 - 1800: normal styles apply (desktop first)
+
+1em = 16px
+
+$breakpoint argument choices:
+-phone
+-tab-port
+-tab-land
+*/
+@mixin respond ($breakpoint) {
+    @if $breakpoint==phone {
+        @media (max-device-width: 36em) {
+            @content
+        }
+
+        ;
+    }
+
+    @if $breakpoint==tab-port {
+        @media (max-device-width: 48em) {
+            @content
+        }
+
+        ;
+    }
+
+    @if $breakpoint==tab-land {
+        @media(max-device-width: 75em) {
+            @content
+        }
+
+        ;
+    }
+}
+
+@mixin resize ($breakpoint) {
+    @if $breakpoint==skinny {
+        @media (max-width: 36em) {
+            @content
+        }
+
+        ;
+    }
+
+    @if $breakpoint==mid {
+        @media (max-width: 48em) {
+            @content
+        }
+
+        ;
+    }
+
+    @if $breakpoint==wide {
+        @media(max-width: 75em) {
+            @content
+        }
+
+        ;
+    }
+}

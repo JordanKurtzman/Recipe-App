@@ -26,7 +26,15 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
 
     
     return (
-        <div>
+        <div className="recipetable">
+        {recipes.length > 0 && <div className="recipetable__labels">
+            <div>Name</div>
+            <div>Ingredients</div>
+            <div>Instructions</div>
+            <div>Notes</div>
+        </div>}
+        
+
     {recipes.map((recipe, index) => {
         return <Recipe 
         name={recipe.name}

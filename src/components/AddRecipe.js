@@ -5,16 +5,15 @@ const AddRecipe = ({addRecipe}) => {
     const [ingredients, setIngredients] = useState('')
     const [instructions, setInstructions] = useState('')
     const [notes, setNotes] = useState('')
-    const [tag, setTag] = useState ('')
-    const [tags, setTags] = useState([])
+  
 
     const handleSubmit = () => {
-        addRecipe(name, ingredients, instructions, notes, tags)
+        addRecipe(name, ingredients, instructions, notes)
         setName('')
         setIngredients('')
         setInstructions('')
         setNotes('')
-        setTags([])
+        
     }
 
     const handleNameChange = (e) => {
@@ -29,18 +28,13 @@ const AddRecipe = ({addRecipe}) => {
     const handleNotesChange = (e) => {
         setNotes(e.target.value)
     }
-    const handleTagChange = (e) => {
-        setTag(e.target.value)
-    }
-    const deleteTag = (tag) => {
-        setTags(tags.filter((item) => item !== tag))
-    }
+    
    
     
 
     return (
-        <div>
-        <h2>Add a recipe:</h2>
+        <div className='addform'>
+        <h2 className='addform__heading'>Add a recipe:</h2>
         
                 <input
                     type="text"
@@ -67,23 +61,7 @@ const AddRecipe = ({addRecipe}) => {
                     onChange={handleNotesChange}
                     value={notes}
                 />
-                <label>Add tags to your recipe:</label>
-                <input 
-                type="text"
-                placeholder='tags'
-                onChange={handleTagChange}
-                value={tag}
                 
-                onKeyPress={((e) =>{
-                    if(e.key === 'Enter'){
-                        setTags((prevTags) => setTags([...prevTags, e.target.value]))
-                        setTag('')
-                    }
-                })}
-                />
-                {tags && tags.map((tag, index) => {
-                    return <p key={index}>{tag}<button onClick={(() => deleteTag(tag))}>x</button></p>
-                })}
                
                 <button onClick={handleSubmit}>Add Recipe</button>
         
