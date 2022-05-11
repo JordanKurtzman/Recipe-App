@@ -32,6 +32,8 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
             <div>Ingredients</div>
             <div>Instructions</div>
             <div>Notes</div>
+                <button className="button" onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
+                <button className="button" onClick={(() => buttonChange())}>{buttonText}</button>
         </div>}
         
 
@@ -52,11 +54,7 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
         />
     })}            
 
-            {recipes.length > 0 && <div>
-                <button onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
-                <button onClick={(() => buttonChange())}>{buttonText}</button>
-                </div>
-        }
+            
         
         </div>
     )

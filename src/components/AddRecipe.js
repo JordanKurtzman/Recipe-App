@@ -63,7 +63,7 @@ const AddRecipe = ({addRecipe}) => {
                 />
                 
                
-                <button onClick={handleSubmit}>Add Recipe</button>
+            <button className="button" onClick={handleSubmit}>Add Recipe</button>
         
         
         </div>

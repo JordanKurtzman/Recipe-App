@@ -1,3 +1,13 @@
 .recipetable {
     display: flex;
+    grid-column-start: 2;
+    grid-column-end: span 2;
+    justify-self: center;
+    &__labels{
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-evenly;
+        
+    }
 }

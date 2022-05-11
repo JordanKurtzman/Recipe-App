@@ -65,17 +65,18 @@ const RecipeApp = () => {
     return (
         <div className="recipeapp">
 
-            <h1>Recipes</h1>
-            <ErrorBoundary
-                FallbackComponent={ErrorFallBack}>
-                <RecipeList
-                    recipes={recipes}
-                    addRecipe={addRecipe}
-                    deleteRecipe={deleteRecipe}
-                    
+            <h1 className='recipeapp__heading'>Recipes</h1>
+            <div className="recipeapp__container">
+                <ErrorBoundary
+                    FallbackComponent={ErrorFallBack}>
+                    <RecipeList
+                        recipes={recipes}
+                        addRecipe={addRecipe}
+                        deleteRecipe={deleteRecipe}
+
                     />
 
-            </ErrorBoundary>
+                </ErrorBoundary>
 
 
 
@@ -83,9 +84,11 @@ const RecipeApp = () => {
 
 
 
-            <AddRecipe
-                addRecipe={addRecipe}
-            />
+                <AddRecipe
+                    addRecipe={addRecipe}
+                />
+            </div>
+            
 
 
 

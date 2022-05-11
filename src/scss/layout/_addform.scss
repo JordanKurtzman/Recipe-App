@@ -1,9 +1,14 @@
 .addform {
-    width: 40%;
+    width: 80%;
     padding: 2rem;
     display: flex;
     flex-direction: column;
     font-family: 'Lato', sans-serif;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    justify-self: center;
+    position: relative;
+    
     &__heading {
         size: 2.2rem;
     }
