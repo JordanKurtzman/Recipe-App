@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux'
 
 const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
     const [buttonText, setButtonText] = useState('Sort New to Old')
-
     const dispatch = useDispatch()
 
     const buttonChange = () => {
@@ -27,16 +26,19 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
     
     return (
         <div className="recipetable">
-        {recipes.length > 0 && <div className="recipetable__labels">
-            <div>Name</div>
-            <div>Ingredients</div>
-            <div>Instructions</div>
-            <div>Notes</div>
-                <button className="button" onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
-                <button className="button" onClick={(() => buttonChange())}>{buttonText}</button>
-        </div>}
         
-
+            {recipes.length > 0
+                 && <div> 
+                    <button className="button" onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
+                    <button className="button" onClick={(() => buttonChange())}>{buttonText}</button>
+                 </div>
+  }
+                   
+                    
+                
+        
+        
+    
     {recipes.map((recipe, index) => {
         return <Recipe 
         name={recipe.name}
@@ -49,11 +51,9 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
         deleteRecipe={deleteRecipe}
         addRecipe={addRecipe}
         key={index}
-        
-        
         />
-    })}            
-
+    })}
+    
             
         
         </div>

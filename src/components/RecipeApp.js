@@ -1,10 +1,13 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { ErrorBoundary } from 'react-error-boundary'
 import RecipeList from './RecipeList'
 import AddRecipe from './AddRecipe'
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_RECIPE, DELETE_RECIPE } from '../features/recipeslice';
+import {db } from '../firebase-config'
+import { collection, addDoc, getDocs } from 'firebase/firestore'
+
 
 
 const ErrorFallBack = ({ error }) => {
@@ -26,11 +29,25 @@ const RecipeApp = () => {
 
     const dispatch = useDispatch()
     const recipes = useSelector((state) => state.recipes)
-
+    const recipeCollectionRef = collection(db, 'recipes')
     
+
+
+    useEffect(() => {
+        const getRecipes = async () => {
+            const data = await getDocs(recipeCollectionRef)
+            setRecipeData(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
+        }
+        getRecipes()
+        
+    }, [])
+
+    const updateRecipes = async (newRecipe) => {
+        await addDoc(recipeCollectionRef, newRecipe)
+    }
     
 
-    const addRecipe = (name, ingredients, instructions, notes, tags) => {
+    const addRecipe = (name, ingredients, instructions, notes) => {
         const date = new Date()
         const newRecipe = {
             name: name,
@@ -40,10 +57,11 @@ const RecipeApp = () => {
             id: uuidv4(),
             date: date.toLocaleDateString(),
             createdAt: Date.now(),
-            tags: tags
+            
         }
         dispatch(ADD_RECIPE(newRecipe))
         console.log(recipes)
+        updateRecipes(newRecipe)
     }
 
     const deleteRecipe = (id) => {

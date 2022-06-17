@@ -63,14 +63,16 @@ const Recipe = ({id, name, instructions, ingredients, notes, deleteRecipe}) => {
     
 
     return (
+        
         <div>
             {name && <div>Name: {name}</div>}
             {ingredients && <div>Ingredients: {ingredients}</div>}
             {instructions && <div>Instructions: {ingredients}</div>}
             {notes && <div>Notes: {notes}</div>}
 
-        <button onClick={(() => deleteRecipe(id))}>Delete</button>
-        <button onClick={modalOpen}>Edit</button>
+            <button onClick={(() => deleteRecipe(id))}>Delete</button>
+            <button onClick={modalOpen}>Edit</button>
+            
         <Modal
                 isOpen={modalIsOpen}
                 ariaHideApp={false}
