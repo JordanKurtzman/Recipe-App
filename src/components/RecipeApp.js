@@ -6,7 +6,7 @@ import AddRecipe from './AddRecipe'
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_RECIPE, DELETE_RECIPE } from '../features/recipeslice';
 import {db } from '../firebase-config'
-import { collection, addDoc, getDocs } from 'firebase/firestore'
+import { collection, addDoc, getDoc } from 'firebase/firestore'
 
 
 
@@ -29,22 +29,9 @@ const RecipeApp = () => {
 
     const dispatch = useDispatch()
     const recipes = useSelector((state) => state.recipes)
-    const recipeCollectionRef = collection(db, 'recipes')
     
 
-
-    useEffect(() => {
-        const getRecipes = async () => {
-            const data = await getDocs(recipeCollectionRef)
-            setRecipeData(data.docs.map((doc)=>({...doc.data(), id: doc.id})))
-        }
-        getRecipes()
-        
-    }, [])
-
-    const updateRecipes = async (newRecipe) => {
-        await addDoc(recipeCollectionRef, newRecipe)
-    }
+    
     
 
     const addRecipe = (name, ingredients, instructions, notes) => {
@@ -61,7 +48,7 @@ const RecipeApp = () => {
         }
         dispatch(ADD_RECIPE(newRecipe))
         console.log(recipes)
-        updateRecipes(newRecipe)
+        
     }
 
     const deleteRecipe = (id) => {

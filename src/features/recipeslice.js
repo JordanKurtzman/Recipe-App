@@ -1,4 +1,14 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import {collection, getDocs} from 'firebase/firestore'
+import { db } from '../firebase-config'
+
+export const getRecipes = createAsyncThunk(
+    'recipes/getRecipes',
+    async () => {
+        const snapshot = await getDocs(collection (db, 'recipes'))
+        snapshot.docs.map((doc) => doc.data())
+    }
+)
 
 
 
@@ -90,6 +100,18 @@ export const recipeSlice = createSlice({
         
 
 
+    },
+    extraReducers: {
+        [getRecipes.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [getRecipes.fulfilled]: (state, action) => {
+            state.recipes = action.payload
+            state.status = 'loading'
+        },
+        [getRecipes.rejected]: (state, action) => {
+            state.status = 'failed'
+        }
     }
     
 })
