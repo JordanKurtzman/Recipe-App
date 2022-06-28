@@ -1,12 +1,40 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import {collection, getDocs} from 'firebase/firestore'
+import {collection, getDocs, query, where, deleteDoc, addDoc } from 'firebase/firestore'
 import { db } from '../firebase-config'
 
 export const getRecipes = createAsyncThunk(
     'recipes/getRecipes',
     async () => {
         const snapshot = await getDocs(collection (db, 'recipes'))
-        snapshot.docs.map((doc) => doc.data())
+        const array = []
+        snapshot.forEach((doc) =>{
+            array.push(doc.data())
+        })
+        return array
+    }
+)
+
+export const addRecipeFirestore = createAsyncThunk(
+    'recipes/addRecipe',
+    async (newRecipe) => {
+        const docRef = await addDoc(collection(db, "recipes"), newRecipe)
+        console.log(docRef.data())
+        return docRef.data()
+
+
+    }
+)
+
+export const deleteByID = createAsyncThunk(
+    'recipes/deleteByID',
+    async (id) => {
+        const q = query(collection(db, "recipes"), where("id", "==", id));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data())
+            doc.deleteDoc()
+        })
+       
     }
 )
 
@@ -101,17 +129,17 @@ export const recipeSlice = createSlice({
 
 
     },
-    extraReducers: {
-        [getRecipes.pending]: (state, action) => {
-            state.status = 'loading'
-        },
-        [getRecipes.fulfilled]: (state, action) => {
-            state.recipes = action.payload
-            state.status = 'loading'
-        },
-        [getRecipes.rejected]: (state, action) => {
-            state.status = 'failed'
-        }
+    extraReducers: (builder) => {
+        builder.addCase(getRecipes.fulfilled,(state, {payload}) => {
+            state.recipes = payload
+        })
+        .addCase(deleteByID.fulfilled, (state, {payload}) => {
+            state.recipes = payload
+            
+        })
+        .addCase(addRecipeFirestore.fulfilled, (state, {payload}) => {
+            state.recipes+=payload
+        })
     }
     
 })

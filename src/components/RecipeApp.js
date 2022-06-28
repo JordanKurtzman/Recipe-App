@@ -1,12 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { ErrorBoundary } from 'react-error-boundary'
 import RecipeList from './RecipeList'
 import AddRecipe from './AddRecipe'
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_RECIPE, DELETE_RECIPE } from '../features/recipeslice';
-import {db } from '../firebase-config'
-import { collection, addDoc, getDoc } from 'firebase/firestore'
+import { getRecipes, deleteByID, addRecipeFirestore } from '../features/recipeslice';
 
 
 
@@ -29,6 +28,10 @@ const RecipeApp = () => {
 
     const dispatch = useDispatch()
     const recipes = useSelector((state) => state.recipes)
+
+    useEffect(() => {
+        dispatch(getRecipes());
+    }, []);
     
 
     
@@ -47,12 +50,14 @@ const RecipeApp = () => {
             
         }
         dispatch(ADD_RECIPE(newRecipe))
+        dispatch(addRecipeFirestore(newRecipe))
         console.log(recipes)
         
     }
 
     const deleteRecipe = (id) => {
         dispatch(DELETE_RECIPE(id))
+        dispatch(deleteByID(id))
         console.log('delete')
     }
     
