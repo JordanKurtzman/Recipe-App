@@ -4,8 +4,8 @@ import { ErrorBoundary } from 'react-error-boundary'
 import RecipeList from './RecipeList'
 import AddRecipe from './AddRecipe'
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_RECIPE, DELETE_RECIPE } from '../features/recipeslice';
-import { getRecipes, deleteByID, addRecipeFirestore } from '../features/recipeslice';
+import { ADD_RECIPE, DELETE_RECIPE, deleteRecipeFirestore } from '../features/recipeslice';
+import { getRecipes, addRecipeFirestore, deleteRecipeById } from '../features/recipeslice';
 
 
 
@@ -44,33 +44,16 @@ const RecipeApp = () => {
             ingredients: ingredients,
             instructions: instructions,
             notes: notes,
-            id: uuidv4(),
+            recipeId: uuidv4(),
             date: date.toLocaleDateString(),
             createdAt: Date.now(),
             
         }
         dispatch(ADD_RECIPE(newRecipe))
-        dispatch(addRecipeFirestore(newRecipe))
-        console.log(recipes)
-        
+        dispatch(addRecipeFirestore(newRecipe)) 
     }
 
-    const deleteRecipe = (id) => {
-        dispatch(DELETE_RECIPE(id))
-        dispatch(deleteByID(id))
-        console.log('delete')
-    }
     
-
-    
- 
-
-   
-
-    
-
-
-
 
     return (
         <div className="recipeapp">
@@ -81,8 +64,7 @@ const RecipeApp = () => {
                     FallbackComponent={ErrorFallBack}>
                     <RecipeList
                         recipes={recipes}
-                        addRecipe={addRecipe}
-                        deleteRecipe={deleteRecipe}
+                        
 
                     />
 

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import Modal  from 'react-modal'
 import { useDispatch } from 'react-redux'
-import { EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES } from '../features/recipeslice'
+import { EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, deleteRecipe } from '../features/recipeslice'
 
 
 
 
 
-const Recipe = ({id, name, instructions, ingredients, notes, deleteRecipe}) => {
+const Recipe = ({recipeId, name, instructions, ingredients, notes}) => {
     const [modalIsOpen, setIsOpen] = useState(false)
     const [newName, setName] = useState('')
     const [newIngredients, setIngredients] = useState('')
@@ -23,22 +23,21 @@ const Recipe = ({id, name, instructions, ingredients, notes, deleteRecipe}) => {
         setIsOpen(false)
     }
 
-    const separator = ","
-    const ingredientsArray = ingredients.split(separator)
 
     const saveEdits = (newName, newIngredients, newInstructions, newNotes, id) => {
         if(newName !== ''){
-            dispatch(EDIT_RECIPE_NAME({ id: id, name: newName }))
+            dispatch(EDIT_RECIPE_NAME({ recipeId: recipeId, name: newName }))
+            
         }
         if(newIngredients !== '') {
-            dispatch(EDIT_RECIPE_INGREDIENTS({ id: id, ingredients: newIngredients }))
+            dispatch(EDIT_RECIPE_INGREDIENTS({ recipeId: recipeId, ingredients: newIngredients }))
         }
         if(newInstructions !== ''){
-            dispatch(EDIT_RECIPE_INSTRUCTIONS({ id: id, instructions: newInstructions }))
+            dispatch(EDIT_RECIPE_INSTRUCTIONS({ recipeId: recipeId, instructions: newInstructions }))
 
         }
         if(newNotes !== ''){
-            dispatch(EDIT_RECIPE_NOTES({ id: id, notes: newNotes }))
+            dispatch(EDIT_RECIPE_NOTES({ recipeId: recipeId, notes: newNotes }))
         }
     
         
@@ -70,7 +69,9 @@ const Recipe = ({id, name, instructions, ingredients, notes, deleteRecipe}) => {
             {instructions && <div>Instructions: {ingredients}</div>}
             {notes && <div>Notes: {notes}</div>}
 
-            <button onClick={(() => deleteRecipe(id))}>Delete</button>
+            <button onClick={() => {
+                dispatch(deleteRecipe({recipeId}))
+            }}>Delete</button>
             <button onClick={modalOpen}>Edit</button>
             
         <Modal
@@ -106,7 +107,7 @@ const Recipe = ({id, name, instructions, ingredients, notes, deleteRecipe}) => {
                     
                 
 
-                <button onClick={(() =>saveEdits(newName, newIngredients, newInstructions, newNotes, id))}>Save</button>
+                <button onClick={(() =>saveEdits(newName, newIngredients, newInstructions, newNotes, recipeId))}>Save</button>
 
         </Modal>
         

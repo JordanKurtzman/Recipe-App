@@ -45,10 +45,9 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
         ingredients={recipe.ingredients}
         instructions={recipe.instructions}
         notes={recipe.notes}
-        id={recipe.id}
+        recipeId={recipe.recipeId}
         createdAt={recipe.createdAt}
         date={recipe.date}
-        deleteRecipe={deleteRecipe}
         addRecipe={addRecipe}
         key={index}
         />
