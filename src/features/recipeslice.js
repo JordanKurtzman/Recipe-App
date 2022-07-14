@@ -1,7 +1,9 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { collection, getDocs, deleteDoc, addDoc, doc, query, where } from 'firebase/firestore'
+import { collection, getDocs, deleteDoc, addDoc, query, where, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase-config'
 
+//Read recipes from firestore
 export const getRecipes = createAsyncThunk(
     'recipes/getRecipes',
     async () => {
@@ -14,48 +16,120 @@ export const getRecipes = createAsyncThunk(
     }
 )
 
-export const addRecipeFirestore = createAsyncThunk(
-    'recipes/addRecipe',
-    async (newRecipe) => {
+//Add recipes to firestore/redux
+const addRecipeFirestore = async (newRecipe) => {
         const docRef = await addDoc(collection(db, "recipes"), newRecipe)
-        console.log(docRef.data())
-        return docRef.data()
-    }
-)
-
-export const oldDeleteRecipe = ({recipeId}) => {
-        return async (dispatch) => {
-            const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`));
-            const querySnapshot = await getDocs(q);
-            querySnapshot.forEach(async(doc) => {
-                console.log(doc.id, " => ", doc.data())
-                await deleteDoc(doc)
-            });
-            dispatch(DELETE_RECIPE({recipeId}))
-        }
 }
+
+
+export const addRecipeToFirestoreAndRedux = (newRecipe) => {
+    return (dispatch) => {
+        return addRecipeFirestore(newRecipe).then(() => {
+            dispatch(ADD_RECIPE(newRecipe))
+        })
+    }
+
+}
+
+
+// Delete recipes from firestore, redux
+const deleteRecipeFirestore = async ({recipeId}) => {
+    const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+    const querySnapshot = await getDocs(q);
+    const deletePromises = querySnapshot.docs.map((d) => deleteDoc(d.ref))
+    await Promise.all(deletePromises)
+}
+
 
 export const deleteRecipe = ({recipeId}) => {
-    return async(dispatch) => {
+    return (dispatch) =>{
+        return deleteRecipeFirestore({recipeId}).then(() =>{
+            dispatch(DELETE_RECIPE({recipeId}))
+        })
+    }
+    
+}
+
+//Update recipes in firestore
+const updateNameInFirestore = async ({newName, recipeId}) => {
+   
         const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
         const querySnapshot = await getDocs(q);
-        const deletePromises = querySnapshot.docs.map((d) => deleteDoc(d.ref))
-        await Promise.all(deletePromises)
+        const updatePromise = querySnapshot.docs.map((d) => updateDoc(d.ref, {name: newName}))
+        await Promise.all(updatePromise)
+        console.log("Name Updated")
+        
 
-        console.log("Documents deleted")
-        dispatch(DELETE_RECIPE({ recipeId }))
+}
 
-
+export const updateName = ({newName, recipeId}) => {
+    return (dispatch) => {
+        return updateNameInFirestore({newName, recipeId}).then(() =>{
+            dispatch(EDIT_RECIPE_NAME({recipeId: recipeId, name: newName}))
+        })
     }
 }
 
 
 
+const updateNotesinFirestore = async ({newNotes, recipeId}) => {
+    
+        const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+        const querySnapshot = await getDocs(q);
+        const updatePromise = querySnapshot.docs.map((d) => updateDoc(d.ref, { notes: newNotes }))
+        await Promise.all(updatePromise)
+        console.log("Notes updated")
+        
+    
+}
+
+export const updateNotes = ({ newNotes, recipeId }) => {
+    return (dispatch) => {
+        return updateNotesinFirestore({ newNotes, recipeId }).then(() => {
+            dispatch(EDIT_RECIPE_NOTES({ recipeId: recipeId, notes: newNotes }))
+        })
+    }
+}
+
+const updateIngredientsinFirestore = async ({ newIngredients, recipeId }) => {
+    
+        const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+        const querySnapshot = await getDocs(q);
+        const updatePromise = querySnapshot.docs.map((d) => updateDoc(d.ref, { ingredients: newIngredients }))
+        await Promise.all(updatePromise)
+        console.log("Ingredients updated")
+
+    
+}
+
+export const updateIngredients = ({ newIngredients, recipeId }) => {
+    return (dispatch) => {
+        return updateIngredientsinFirestore({ newIngredients, recipeId }).then(() => {
+            dispatch(EDIT_RECIPE_INGREDIENTS({ recipeId: recipeId, ingredients: newIngredients }))
+        })
+    }
+}
+
+const updateInstructionsinFirestore = async ({ newInstructions, recipeId }) => {
+    
+        const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+        const querySnapshot = await getDocs(q);
+        const updatePromise = querySnapshot.docs.map((d) => updateDoc(d.ref, { instructions: newInstructions }))
+        await Promise.all(updatePromise)
+        console.log("Instructions updated")
+
+    
+}
 
 
-
-
-
+export const updateInstructions = ({ newInstructions, recipeId }) => {
+    return (dispatch) => {
+        return updateInstructionsinFirestore({ newInstructions, recipeId }).then(() => {
+            dispatch(EDIT_RECIPE_INSTRUCTIONS({ recipeId: recipeId, instructions: newInstructions }))
+        })
+    }
+}
+//Redux slice and reducers
 
 export const recipeSlice = createSlice({
     name: 'recipesSlice',
@@ -143,9 +217,7 @@ export const recipeSlice = createSlice({
         builder.addCase(getRecipes.fulfilled, (state, { payload }) => {
             state.recipes = payload
         })
-            .addCase(addRecipeFirestore.fulfilled, (state, { payload }) => {
-                state.recipes = payload
-            })
+        
     }
 
 })

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Modal  from 'react-modal'
 import { useDispatch } from 'react-redux'
-import { EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, deleteRecipe } from '../features/recipeslice'
+import { deleteRecipe, updateName, updateIngredients, updateInstructions, updateNotes, getRecipes } from '../features/recipeslice'
 
 
 
@@ -24,23 +24,25 @@ const Recipe = ({recipeId, name, instructions, ingredients, notes}) => {
     }
 
 
-    const saveEdits = (newName, newIngredients, newInstructions, newNotes, id) => {
+    const saveEdits = (newName, newIngredients, newInstructions, newNotes, recipeId) => {
         if(newName !== ''){
-            dispatch(EDIT_RECIPE_NAME({ recipeId: recipeId, name: newName }))
+            dispatch(updateName({newName, recipeId}))
             
         }
         if(newIngredients !== '') {
-            dispatch(EDIT_RECIPE_INGREDIENTS({ recipeId: recipeId, ingredients: newIngredients }))
+            dispatch(updateIngredients({newIngredients, recipeId}))
         }
         if(newInstructions !== ''){
-            dispatch(EDIT_RECIPE_INSTRUCTIONS({ recipeId: recipeId, instructions: newInstructions }))
+            dispatch(updateInstructions({newInstructions, recipeId}))
 
         }
         if(newNotes !== ''){
-            dispatch(EDIT_RECIPE_NOTES({ recipeId: recipeId, notes: newNotes }))
+            dispatch(updateNotes({recipeId, newNotes}))
         }
-    
+
         
+    
+       
         modalClose()
     }
     const handleNameChange = (e) => {
