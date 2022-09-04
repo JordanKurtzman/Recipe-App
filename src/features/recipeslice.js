@@ -5,9 +5,9 @@ import { db } from '../firebase-config'
 
 //Read recipes from firestore
 export const getRecipes = createAsyncThunk(
-    'recipes/getRecipes',
-    async () => {
-        const snapshot = await getDocs(collection (db, 'recipes'))
+    'users/recipes/getRecipes',
+    async (userId) => {
+        const snapshot = await getDocs(collection (db, 'users', `${userId}`, 'recipes'))
         const array = []
         snapshot.forEach((doc) =>{
             array.push(doc.data())
@@ -18,7 +18,7 @@ export const getRecipes = createAsyncThunk(
 
 //Add recipes to firestore/redux
 const addRecipeFirestore = async (newRecipe) => {
-        const docRef = await addDoc(collection(db, "recipes"), newRecipe)
+        const docRef = await addDoc(collection(db, "users/recipes"), newRecipe)
 }
 
 
@@ -34,7 +34,7 @@ export const addRecipeToFirestoreAndRedux = (newRecipe) => {
 
 // Delete recipes from firestore, redux
 const deleteRecipeFirestore = async ({recipeId}) => {
-    const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+    const q = query(collection(db, "users/recipes"), where("recipeId", "==", `${recipeId}`))
     const querySnapshot = await getDocs(q);
     const deletePromises = querySnapshot.docs.map((d) => deleteDoc(d.ref))
     await Promise.all(deletePromises)

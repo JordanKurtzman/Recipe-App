@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from '@firebase/firestore'
+import { getAuth, connectAuthEmulator, signInWithEmailAndPassword } from "firebase/auth";
 
 
 const firebaseConfig = {
@@ -8,8 +9,17 @@ const firebaseConfig = {
     projectId: process.env.REACT_APP_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_APPID
+    appId: process.env.REACT_APP_APPID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
+
+
 
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
+export const auth = getAuth(app)
+
+
+
+
+
