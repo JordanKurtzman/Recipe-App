@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 
 
 
-const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
+const RecipeList = ({recipes, addRecipe}) => {
     const [buttonText, setButtonText] = useState('Sort New to Old')
     const dispatch = useDispatch()
 
@@ -31,8 +31,7 @@ const RecipeList = ({recipes, addRecipe, deleteRecipe}) => {
                  && <div> 
                     <button className="button" onClick={(() => dispatch(SORT_ALPHABETICALLY()))}>Sort A - Z</button>
                     <button className="button" onClick={(() => buttonChange())}>{buttonText}</button>
-                 </div>
-  }
+                 </div>}
                    
                     
                 

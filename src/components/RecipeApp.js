@@ -37,7 +37,8 @@ const RecipeApp = () => {
 
 
     useEffect(() => {
-        dispatch(getRecipes());
+        dispatch(getRecipes())
+        console.log(recipes);
     }, []);
 
     useEffect(() => {

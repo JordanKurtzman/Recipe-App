@@ -46,7 +46,7 @@ const Login = () => {
                  onChange={(e) => setPassword(e.target.value)}
                  />
                 <button onClick={dispatch(signInWithGoogle)}>Login with Google</button>
-            <button onClick={() => dispatch(logInWithEmailAndPassword(auth, email, password))}>Sign in with email</button>
+            <button onClick={() => logInWithEmailAndPassword(auth, email, password)}>Sign in with email</button>
                 <div>
                     <Link to="/reset">Forgot Password</Link>
                 </div>

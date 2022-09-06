@@ -51,9 +51,7 @@ const googlePopUp = async () => {
 
 export const signInWithGoogle = () => {
     return (dispatch) => {
-        googlePopUp().then((uid) =>{
-            dispatch(LOGIN(uid))
-        })
+        dispatch(googlePopUp())
     }
 }
 
@@ -62,7 +60,7 @@ export const signInWithGoogle = () => {
 
 // log in with email and password
 
-const signInEmail = (auth, email, password) => {
+export const logInWithEmailAndPassword = (auth, email, password) => {
     signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
         const user = userCredential.user
     }).catch((error) => {
@@ -72,13 +70,7 @@ const signInEmail = (auth, email, password) => {
     })
 }
 
-export const logInWithEmailAndPassword = (auth, email, password) => {
-    return (dispatch) => {
-        signInEmail(auth, email, password).then((uid) => {
-            dispatch(LOGIN(uid))
-        })
-    }
-}
+
 
 //Register email and password
 
