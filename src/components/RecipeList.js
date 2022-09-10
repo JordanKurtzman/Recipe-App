@@ -38,7 +38,8 @@ const RecipeList = ({recipes, addRecipe}) => {
         
         
     
-    {recipes.map((recipe, index) => {
+    {recipes.length > 0 && 
+        recipes.map((recipe, index) => {
         return <Recipe 
         name={recipe.name}
         ingredients={recipe.ingredients}

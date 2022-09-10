@@ -31,7 +31,7 @@ onAuthStateChanged(auth, (user) => {
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
     console.log('logged in')
-    store.dispatch(LOGIN(uid))
+    store.dispatch(LOGIN({user: uid}))
 
 
     // ...

@@ -77,15 +77,18 @@ export const logInWithEmailAndPassword = (auth, email, password) => {
 export const registerWithEmailAndPassword = async (email, password, name) => {
 
     try {
-        const { user } = await createUserWithEmailAndPassword(auth, email, password)
-        await setDoc(doc(db, "users", user.uid), { name: name, email: email, id: user.uid, authProvider: 'email' })
+        const {user} = await createUserWithEmailAndPassword(auth, email, password)
+       
+        await setDoc(doc(db, "users", user.uid), { name: name, email: email, uid: user.uid, authProvider: 'email' })
         console.log('registered')
     } catch {
         console.log('error')
         
     }
    
-};
+}
+
+
 
 //reset password
 

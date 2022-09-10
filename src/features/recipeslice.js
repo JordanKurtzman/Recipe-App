@@ -8,7 +8,7 @@ export const getRecipes = createAsyncThunk(
     'user/recipes',
     async (getState) => {
         const state = getState()
-        const uid = state.user.uid
+        const uid = state.users.uid
         const snapshot = await getDocs(collection(db, `users/${uid}/recipes`))
         const array = []
         snapshot.forEach((doc) => {
@@ -20,14 +20,15 @@ export const getRecipes = createAsyncThunk(
 
 
 //Add recipes to firestore/redux
-const addRecipeFirestore = async (newRecipe) => {
-        const docRef = await addDoc(collection(db, "users/recipes"), newRecipe)
+const addRecipeFirestore = async (newRecipe, uid) => {
+        const docRef = await addDoc(collection(db, `users/${uid}/recipes`), newRecipe)
 }
 
 
 export const addRecipeToFirestoreAndRedux = (newRecipe) => {
-    return (dispatch) => {
-        return addRecipeFirestore(newRecipe).then(() => {
+    return (dispatch, getState) => {
+        const uid = getState().user
+        return addRecipeFirestore(newRecipe, uid).then(() => {
             dispatch(ADD_RECIPE(newRecipe))
         })
     }
