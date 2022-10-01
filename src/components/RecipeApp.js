@@ -35,17 +35,24 @@ const RecipeApp = () => {
 
 
 
-
     useEffect(() => {
         dispatch(getRecipes())
         console.log(recipes);
     }, []);
+   
 
     useEffect(() => {
         if (loading) return;
         if (!user) return navigate("/");
         
-    }, [user, loading]);
+    }, [user, loading])
+
+
+
+  
+
+
+
 
 
 

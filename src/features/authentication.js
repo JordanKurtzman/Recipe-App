@@ -121,16 +121,16 @@ export const logout = () => {
 
 
 export const userSlice = createSlice({
-    name: 'user',
+    name: 'uid',
     initialState: {
-        user: null,
+        uid: null,
     },
     reducers: {
         LOGIN: (state, action) => {
-            state.user = action.payload;
+            state.uid = action.payload;
         },
         LOGOUT: (state) => {
-            state.user = null;
+            state.uid = null;
         },
     },
 });

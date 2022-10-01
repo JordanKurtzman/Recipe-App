@@ -1,22 +1,50 @@
 
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import { collection, getDocs, deleteDoc, addDoc, query, where, updateDoc } from 'firebase/firestore'
 import { db } from '../firebase-config'
 
-//Read recipes from firestore
+// Read recipes from firestore
+
+
+// const getRecipesFireStore = async (uid) => {
+//         const snapshot = await getDocs(collection(db, `users/${uid}/recipes`))
+//         const array = []
+//         snapshot.forEach((doc) => {
+//             array.push(doc.data())
+//         })
+//         return array  
+// }
+
+// export const getRecipes = () => {
+//     return (dispatch, getState) => {
+//         const state = getState()
+//         const uid = state.users.uid.user
+//         return getRecipesFireStore(uid).then((recipes) =>{
+//             dispatch(GET_RECIPES(recipes))
+//         })
+        
+//     }
+// }
+
 export const getRecipes = createAsyncThunk(
-    'user/recipes',
-    async (getState) => {
-        const state = getState()
-        const uid = state.users.uid
+    'user/getRecipes',
+    async(_, thunkAPI) => {
+        const state = thunkAPI.getState()
+        const uid = state.users.uid.user
         const snapshot = await getDocs(collection(db, `users/${uid}/recipes`))
         const array = []
         snapshot.forEach((doc) => {
             array.push(doc.data())
         })
-        return array
+        return array  
+
+        
     }
 )
+
+
+
+
 
 
 //Add recipes to firestore/redux
@@ -27,9 +55,13 @@ const addRecipeFirestore = async (newRecipe, uid) => {
 
 export const addRecipeToFirestoreAndRedux = (newRecipe) => {
     return (dispatch, getState) => {
-        const uid = getState().user
+        const state = getState()
+        const uid = state.users.uid.user
         return addRecipeFirestore(newRecipe, uid).then(() => {
             dispatch(ADD_RECIPE(newRecipe))
+            
+        }).catch((error) => {
+            console.log(error)
         })
     }
 
@@ -48,7 +80,7 @@ const deleteRecipeFirestore = async ({recipeId, uid}) => {
 export const deleteRecipe = ({recipeId}) => {
     return (dispatch, getState) =>{
         const state = getState()
-        const uid = state.user.uid
+        const uid = state.users.uid.user
         return deleteRecipeFirestore({recipeId, uid}).then(() =>{
             dispatch(DELETE_RECIPE({recipeId}))
         })
@@ -57,9 +89,9 @@ export const deleteRecipe = ({recipeId}) => {
 }
 
 //Update recipes in firestore
-const updateNameInFirestore = async ({newName, recipeId}) => {
+const updateNameInFirestore = async ({newName, recipeId, uid}) => {
    
-        const q = query(collection(db, "recipes"), where("recipeId", "==", `${recipeId}`))
+    const q = query(collection(db, `users/${uid}/recipes`), where("recipeId", "==", `${recipeId}`))
         const querySnapshot = await getDocs(q);
         const updatePromise = querySnapshot.docs.map((d) => updateDoc(d.ref, {name: newName}))
         await Promise.all(updatePromise)
@@ -69,8 +101,10 @@ const updateNameInFirestore = async ({newName, recipeId}) => {
 }
 
 export const updateName = ({newName, recipeId}) => {
-    return (dispatch) => {
-        return updateNameInFirestore({newName, recipeId}).then(() =>{
+    return (dispatch, getState) => {
+        const state = getState()
+        const uid = state.users.uid.user
+        return updateNameInFirestore({newName, recipeId, uid}).then(() =>{
             dispatch(EDIT_RECIPE_NAME({recipeId: recipeId, name: newName}))
         })
     }
@@ -217,17 +251,18 @@ export const recipeSlice = createSlice({
                 }
             })
         },
+        extraReducers: (builder) => {
+            builder.addCase(getRecipes.fulfilled, (state, { payload }) => {
+                state.recipes = payload
+            })
+
+        }
+        
 
     },
-    extraReducers: (builder) => {
-        builder.addCase(getRecipes.fulfilled, (state, { payload }) => {
-            state.recipes = payload
-        })
-        
-    }
 
 })
 
-export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW } = recipeSlice.actions;
+export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW, GET_RECIPES } = recipeSlice.actions;
 
 export default recipeSlice.reducer
