@@ -1,13 +1,9 @@
 import { GoogleAuthProvider,
-    
-     
       signInWithEmailAndPassword,
        createUserWithEmailAndPassword,
        sendPasswordResetEmail,
        signOut,
        signInWithPopup,
-       
-       
        
      } from 'firebase/auth'
 import {

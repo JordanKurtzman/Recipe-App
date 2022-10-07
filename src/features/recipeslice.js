@@ -5,47 +5,20 @@ import { db } from '../firebase-config'
 
 // Read recipes from firestore
 
-
-// const getRecipesFireStore = async (uid) => {
-//         const snapshot = await getDocs(collection(db, `users/${uid}/recipes`))
-//         const array = []
-//         snapshot.forEach((doc) => {
-//             array.push(doc.data())
-//         })
-//         return array  
-// }
-
-// export const getRecipes = () => {
-//     return (dispatch, getState) => {
-//         const state = getState()
-//         const uid = state.users.uid.user
-//         return getRecipesFireStore(uid).then((recipes) =>{
-//             dispatch(GET_RECIPES(recipes))
-//         })
-        
-//     }
-// }
-
 export const getRecipes = createAsyncThunk(
     'user/getRecipes',
-    async(_, thunkAPI) => {
-        const state = thunkAPI.getState()
-        const uid = state.users.uid.user
+    async(uid, thunkAPI) => {
         const snapshot = await getDocs(collection(db, `users/${uid}/recipes`))
         const array = []
         snapshot.forEach((doc) => {
             array.push(doc.data())
         })
+        console.log(array)
         return array  
 
         
     }
 )
-
-
-
-
-
 
 //Add recipes to firestore/redux
 const addRecipeFirestore = async (newRecipe, uid) => {
@@ -56,7 +29,7 @@ const addRecipeFirestore = async (newRecipe, uid) => {
 export const addRecipeToFirestoreAndRedux = (newRecipe) => {
     return (dispatch, getState) => {
         const state = getState()
-        const uid = state.users.uid.user
+        const uid = state.users.uid.uid
         return addRecipeFirestore(newRecipe, uid).then(() => {
             dispatch(ADD_RECIPE(newRecipe))
             
@@ -80,7 +53,7 @@ const deleteRecipeFirestore = async ({recipeId, uid}) => {
 export const deleteRecipe = ({recipeId}) => {
     return (dispatch, getState) =>{
         const state = getState()
-        const uid = state.users.uid.user
+        const uid = state.users.uid
         return deleteRecipeFirestore({recipeId, uid}).then(() =>{
             dispatch(DELETE_RECIPE({recipeId}))
         })
@@ -103,7 +76,7 @@ const updateNameInFirestore = async ({newName, recipeId, uid}) => {
 export const updateName = ({newName, recipeId}) => {
     return (dispatch, getState) => {
         const state = getState()
-        const uid = state.users.uid.user
+        const uid = state.users.uid
         return updateNameInFirestore({newName, recipeId, uid}).then(() =>{
             dispatch(EDIT_RECIPE_NAME({recipeId: recipeId, name: newName}))
         })
@@ -174,7 +147,9 @@ export const updateInstructions = ({ newInstructions, recipeId }) => {
 export const recipeSlice = createSlice({
     name: 'recipesSlice',
     initialState: {
-        recipes: []
+        recipes: [],
+        isLoading: undefined,
+        hasError: false
 
     },
     reducers: {
@@ -251,18 +226,21 @@ export const recipeSlice = createSlice({
                 }
             })
         },
-        extraReducers: (builder) => {
-            builder.addCase(getRecipes.fulfilled, (state, { payload }) => {
-                state.recipes = payload
-            })
-
+        SET_RECIPES: (state, action) => {
+            state.recipes = action.payload
         }
+        
         
 
     },
+    extraReducers: builder => {
+        builder.addCase(getRecipes.fulfilled, (state, action) => {
+            return action.payload
+        })
+    }
 
 })
 
-export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW, GET_RECIPES } = recipeSlice.actions;
+export const { ADD_RECIPE, DELETE_RECIPE, EDIT_RECIPE_NAME, EDIT_RECIPE_INGREDIENTS, EDIT_RECIPE_INSTRUCTIONS, EDIT_RECIPE_NOTES, SORT_ALPHABETICALLY, SORT_NEW_TO_OLD, SORT_OLD_TO_NEW, SET_RECIPES } = recipeSlice.actions;
 
 export default recipeSlice.reducer

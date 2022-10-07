@@ -9,6 +9,9 @@ import * as serviceWorker from './serviceWorker';
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from './firebase-config'
 import {LOGIN, LOGOUT} from './features/authentication'
+import ErrorFallBack from './components/ErrorFallback'
+import { ErrorBoundary } from 'react-error-boundary';
+
 
 
 
@@ -16,7 +19,13 @@ import {LOGIN, LOGOUT} from './features/authentication'
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <ErrorBoundary FallbackComponent={ErrorFallBack}>
+        <App />
+      </ErrorBoundary>
+
+        
+ 
+      
     </Provider>
   </BrowserRouter>
   
@@ -31,7 +40,7 @@ onAuthStateChanged(auth, (user) => {
     // https://firebase.google.com/docs/reference/js/firebase.User
     const uid = user.uid;
     console.log('logged in')
-    store.dispatch(LOGIN({user: uid}))
+    store.dispatch(LOGIN({uid: uid}))
 
 
     // ...

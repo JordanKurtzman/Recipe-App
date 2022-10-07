@@ -9,21 +9,9 @@ import { logout } from '../features/authentication';
 import { getAuth } from 'firebase/auth';
 import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import ErrorFallBack from './ErrorFallback';
 
 
-
-
-
-const ErrorFallBack = ({ error }) => {
-    return (
-        <div role="alert">
-            <p>Something went wrong:</p>
-            <pre>{error.message}</pre>
-
-        </div>
-
-    )
-}
 
 const RecipeApp = () => {
 
@@ -31,15 +19,9 @@ const RecipeApp = () => {
     const recipes = useSelector((state) => state.recipes)
     const auth = getAuth()
     const navigate = useNavigate()
-    const [user, loading, error] = useAuthState(auth);
+    const [user, loading, error] = useAuthState(auth)
 
-
-
-    useEffect(() => {
-        dispatch(getRecipes())
-        console.log(recipes);
-    }, []);
-   
+    const uid = useSelector(state => state.users.uid)
 
     useEffect(() => {
         if (loading) return;
@@ -47,26 +29,11 @@ const RecipeApp = () => {
         
     }, [user, loading])
 
-
-
+    useEffect(() => {
+            dispatch(getRecipes(uid))
+            console.log(uid)
   
-
-
-
-
-
-
-    
-
-
-    
-
-
- 
-    
-
-    
-    
+    }, [dispatch, uid])
 
     const addRecipe = (name, ingredients, instructions, notes) => {
         const date = new Date()
@@ -81,40 +48,23 @@ const RecipeApp = () => {
             
         }
         dispatch(addRecipeToFirestoreAndRedux(newRecipe))
-        
     }
 
-    
 
     return (
         <div className="recipeapp">
-
             <h1 className='recipeapp__heading'>Recipes</h1><button onClick={logout}>Log out</button>
             <div className="recipeapp__container">
                 <ErrorBoundary
                     FallbackComponent={ErrorFallBack}>
                     <RecipeList
                         recipes={recipes}
-                        
-
                     />
-
                 </ErrorBoundary>
-
-
-
-
-
-
-
                 <AddRecipe
                     addRecipe={addRecipe}
                 />
             </div>
-            
-
-
-
         </div>
     );
 }
